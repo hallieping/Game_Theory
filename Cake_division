@@ -1,0 +1,54 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Sep 14 08:23:37 2018
+
+@author: HalliePing
+"""
+import matplotlib.pyplot as plt
+import numpy as np
+F = np.zeros([11,11])
+
+
+for i in range(0,11):
+    for j in range(0,11):
+        if i+j <= 10:
+            F[i,j] = i
+#
+#print(F)
+t_end =50 
+p0_0 = [0.410376,0.107375,0.0253916,0.116684,0.0813494,0.00573677,0.0277255,0.0112791,0.0163166,0.191699,0.00607705]          
+p0_1 = [0.0544685, 0.236312,0.0560727, 0.0469244, 0.0562243, 0.0703294, 0.151136, 0.162231, 0.0098273,0.111366, 0.0451093]
+p_all = np.zeros([t_end,11])
+
+
+for i in range(0,11):
+    p_all[0][i] = p0_1[i]
+
+
+w = np.zeros(11)
+for t in range(0,t_end-1):  
+    w_ave = 0
+    w = np.zeros(11)
+    for i in range(0,11):
+        for j in range(0,11):
+            w[i] += p_all[t][j]*F[i,j]
+        w_ave += w[i]*p_all[t][i]
+    for i in range(0,11):
+        p_all[t+1][i] = p_all[t][i]*w[i] / w_ave
+        
+    
+times = [t for t in range(0,t_end)]
+for i in range(0,11):
+    plt.plot(times,p_all[:,i],label='Demand:%d'%(i))
+#plt.title('The evolution of fair division')
+#plt.ylabel('Frequency in population' )
+#plt.xlabel('Time')
+#plt.legend()
+#plt.show()
+
+
+plt.title('The evolution of an unequal division')
+plt.ylabel('Frequency in population' )
+plt.xlabel('Time')
+plt.legend()
+plt.show()
